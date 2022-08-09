@@ -32,4 +32,4 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # create config command for easy dotfiles 
-alias config='/usr/bin/git --git-dir=/home/jacnil/.cfg/ --work-tree=/home/jacnil'
+alias config='/usr/bin/git --git-dir=/home/jacnil/.dotfiles/ --work-tree=/home/jacnil'
