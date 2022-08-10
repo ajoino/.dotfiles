@@ -164,6 +164,12 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
+                widget.CheckUpdates(
+                    distro='Ubuntu',
+                    no_update_string="\N{White Heavy Check Mark}",
+                    display_format="\N{Cross Mark} {updates}",
+                    update_interval=600,
+                ),
                 widget.KeyboardLayout(
                     configured_keyboards = [
                         "us dvorak",
@@ -197,6 +203,7 @@ screens = [
                         'toggle',
                     ],
                 ),
+                widget.Bluetooth(),
                 widget.UPowerWidget(),
                 #widget.WiFiIcon(interface="wlp58s0", active_color="ffffff"),
                 #widget.BatteryIcon(),
