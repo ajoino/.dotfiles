@@ -36,6 +36,9 @@ from qtile_extras.widget.decorations import RectDecoration
 
 mod = "mod4"
 terminal = "alacritty"
+terminal_run = "alacritty -e"
+terminal_hold = "alacritty --hold -e"
+file_manager = "vifm"
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -70,7 +73,7 @@ keys = [
         desc="Toggle between split and unsplit sides of stack",
     ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod, "control"], "c", lazy.spawn("alacritty -e vim ~/.config/qtile/config.py"), desc="Open qtile config in vim"), 
+    Key([mod, "control"], "c", lazy.spawn(f"{terminal_run} vim ~/.config/qtile/config.py"), desc="Open qtile config in vim"), 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
@@ -80,6 +83,11 @@ keys = [
         [mod, "control"], "l",
         lazy.spawn("i3lock-fancy -p"),
         desc="Launch i3lock-fancy",
+    ),
+    Key(
+        [mod, "control"], "f",
+        lazy.spawn(f"{terminal_run} vifm"),
+        desc="Launch vifm",
     ),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # Volume control
@@ -140,7 +148,7 @@ icon_path = Path("/usr/share/icons/Yaru-dark/24x24/panel/")
 
 widget_defaults = dict(
     font="fira sans",
-    fontsize=14,
+    fontsize=15,
     padding=8,
     theme_path=icon_path,
     decorations=[
@@ -164,11 +172,14 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
+                widget.StatusNotifier(icon_theme=icon_path),
                 widget.CheckUpdates(
                     distro='Ubuntu',
-                    no_update_string="\N{White Heavy Check Mark}",
-                    display_format="\N{Cross Mark} {updates}",
+                    no_update_string="↻",
+                    display_format="↻ {updates}",
+                    restart_indicator="!",
                     update_interval=600,
+                    execute=f"{terminal_hold} apt list --upgradable",
                 ),
                 widget.KeyboardLayout(
                     configured_keyboards = [
