@@ -5,6 +5,7 @@
 # Copyright (c) 2012 Craig Barnes
 # Copyright (c) 2013 horsik
 # Copyright (c) 2013 Tao Sauvage
+# Copyright (c) 2022 Jacob Nilsson
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +40,7 @@ terminal = "alacritty"
 terminal_run = "alacritty -e"
 terminal_hold = "alacritty --hold -e"
 file_manager = "vifm"
+qtile_config_file = Path("~/.config/qtile/config.py").expanduser()
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -73,7 +75,7 @@ keys = [
         desc="Toggle between split and unsplit sides of stack",
     ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    Key([mod, "control"], "c", lazy.spawn(f"{terminal_run} vim ~/.config/qtile/config.py"), desc="Open qtile config in vim"), 
+    #Key([mod, "control"], "c", lazy.spawn(f"open_config.sh"), desc="Open qtile config in vim"), 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
