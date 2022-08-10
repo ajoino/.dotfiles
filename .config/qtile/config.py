@@ -27,10 +27,12 @@
 import subprocess
 from pathlib import Path
 
-from libqtile import bar, layout, widget, hook
+from libqtile import bar, layout, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+from qtile_extras import widget
+from qtile_extras.widget.decorations import RectDecoration
 
 mod = "mod4"
 terminal = "alacritty"
@@ -68,12 +70,28 @@ keys = [
         desc="Toggle between split and unsplit sides of stack",
     ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
+    Key([mod, "control"], "c", lazy.spawn("alacritty -e vim ~/.config/qtile/config.py"), desc="Open qtile config in vim"), 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key(
+        [mod, "control"], "l",
+        lazy.spawn("i3lock-fancy -p"),
+        desc="Launch i3lock-fancy",
+    ),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    # Volume control
+    Key([], "XF86AudioMute",
+        lazy.widget["pulsevolume"].mute(),
+    ),
+    Key([], "XF86AudioLowerVolume",
+        lazy.widget["pulsevolume"].decrease_vol(),
+    ),
+    Key([], "XF86AudioRaiseVolume",
+        lazy.widget["pulsevolume"].increase_vol(),
+    ),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -103,13 +121,13 @@ for i in groups:
     )
 
 layouts = [
-    layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
+    #layout.Columns(),
+    layout.MonadTall(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2),
     layout.Max(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
     # layout.Matrix(),
-    # layout.MonadTall(),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.Tile(),
@@ -118,10 +136,19 @@ layouts = [
     # layout.Zoomy(),
 ]
 
+icon_path = Path("/usr/share/icons/Yaru-dark/24x24/panel/")
+
 widget_defaults = dict(
-    font="sans",
-    fontsize=12, padding=3,)
+    font="fira sans",
+    fontsize=14,
+    padding=8,
+    theme_path=icon_path,
+    decorations=[
+        RectDecoration(colour="#003366", radius=5, filled=True, padding_y=2)
+    ],
+)
 extension_defaults = widget_defaults.copy()
+
 
 screens = [
     Screen(
@@ -148,20 +175,39 @@ screens = [
                         "se svdvorak":"sv dv",
                         "se":"sv",
                     },
-
+                    option="caps:ctrl_modifier",
                 ),
                 widget.OpenWeather(
                     location="Luleå, SE",
                     format="{location_city}: {main_temp:.0f} °{units_temperature}",
                     update_interval=300,
                 ),
-                widget.Systray(),
-                widget.Clock(format="%Y-%m-%d %a %H:%M"),
-                widget.BatteryIcon(theme_path="/usr/share/icons/Yaru-dark/16x16/panel"),
-                widget.Battery(
-                    format="{percent:2.0%}",
+                #widget.Systray(),
+                widget.Clock(format="%a %Y-%m-%d | %H:%M"),
+                #vc.Widget(mode='icon'),
+                widget.PulseVolume(
+                    emoji=True,
+                    theme_path=None,
+                    #theme_path=icon_path.parents[2] / "16x16/panel",
+                    mute_command=[
+                        'amixer',
+                        '-q',
+                        'set',
+                        'Master',
+                        'toggle',
+                    ],
                 ),
-                widget.QuickExit(),
+                widget.UPowerWidget(),
+                #widget.WiFiIcon(interface="wlp58s0", active_color="ffffff"),
+                #widget.BatteryIcon(),
+                #widget.Battery(
+                #    format="{percent:2.0%}",
+                #),
+                widget.QuickExit(
+                    font="fira code",
+                    default_text='[X]',
+                    countdown_format='[{}]',
+                ),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders

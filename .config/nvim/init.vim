@@ -54,6 +54,8 @@ Plug 'iamcco/markdown-preview.nvim', {'do': { -> mkdp#util#install()}, 'for': ['
 Plug 'dpelle/vim-LanguageTool'
 " Haskell
 Plug 'neovimhaskell/haskell-vim'
+" To save with sudo priviliges
+Plug 'lambdalisue/suda.vim'
 call plug#end()
 
 " ncm2 settings
