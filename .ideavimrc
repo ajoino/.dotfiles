@@ -1,0 +1,32 @@
+set number relativenumber
+set encoding=utf-8
+set ruler
+set breakindent
+set cursorline
+set title
+set confirm
+set wrap lbr
+set showbreak=..
+
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set list
+set listchars=tab:>.,trail:.,extends:#,nbsp:.
+set path +=**
+set wildmenu
+
+set visualbell
+set noerrorbells
+set surround
+
+nnoremap j gj
+nnoremap k gk
+nnoremap gv `[v`]
+nnoremap Y y$
+
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+
