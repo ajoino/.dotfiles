@@ -22,6 +22,12 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 set path+=**
 set wildmenu
 
+" Transparent background
+au ColorScheme * hi Normal ctermbg=none guibg=none
+au ColorScheme * hi EndOfBuffer ctermbg=none guibg=none
+au ColorScheme * hi StatusLine ctermbg=darkmagenta guibg=darkmagenta
+au ColorScheme * hi LineNr ctermbg=none guibg=none
+
 
 " :Rpdf command to read pdfs
 :command! -complete=file -nargs=1 Rpdf :r !pdftotext -nopgbrk <q-args> -
@@ -30,7 +36,7 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'da-h/AirLatex.vim', {'do': ':UpdateRemotePlugins'}
 Plug 'lervag/vimtex', {'for': 'tex'}
 Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'

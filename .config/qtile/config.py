@@ -32,15 +32,21 @@ from libqtile import bar, layout, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from qtile_extras import widget
-from qtile_extras.widget.decorations import RectDecoration
+
+from widgets import widgets, widget_defaults, extension_defaults
 
 mod = "mod4"
 terminal = "alacritty"
 terminal_run = "alacritty -e"
 terminal_hold = "alacritty --hold -e"
+browser = "firefox"
 file_manager = "vifm"
 qtile_config_file = Path("~/.config/qtile/config.py").expanduser()
+qtile_config_dir = Path("~/.config/qtile/").expanduser()
+
+@hook.subscribe.startup_once
+def autostart():
+    subprocess.call([qtile_config_dir / "autostart.sh"])
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -50,17 +56,31 @@ keys = [
     Key([mod], "l", lazy.layout.right(), desc="Move focus to right"),
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
-    Key([mod], "space", lazy.widget["keyboardlayout"].next_keyboard(), desc="Move window focus to other window"),
+    Key(
+        [mod],
+        "space",
+        lazy.widget["keyboardlayout"].next_keyboard(),
+        desc="Move window focus to other window",
+    ),
     # Move windows between left/right columns or move up/down in current stack.
     # Moving out of range in Columns layout will create new column.
-    Key([mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key([mod, "shift"], "l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key(
+        [mod, "shift"], "h", lazy.layout.shuffle_left(), desc="Move window to the left"
+    ),
+    Key(
+        [mod, "shift"],
+        "l",
+        lazy.layout.shuffle_right(),
+        desc="Move window to the right",
+    ),
     Key([mod, "shift"], "j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key([mod, "shift"], "k", lazy.layout.shuffle_up(), desc="Move window up"),
     # Grow windows. If current window is on the edge of screen and direction
     # will be to screen edge - window would shrink.
     Key([mod, "control"], "h", lazy.layout.grow_left(), desc="Grow window to the left"),
-    Key([mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"),
+    Key(
+        [mod, "control"], "l", lazy.layout.grow_right(), desc="Grow window to the right"
+    ),
     Key([mod, "control"], "j", lazy.layout.grow_down(), desc="Grow window down"),
     Key([mod, "control"], "k", lazy.layout.grow_up(), desc="Grow window up"),
     Key([mod], "n", lazy.layout.normalize(), desc="Reset all window sizes"),
@@ -75,31 +95,45 @@ keys = [
         desc="Toggle between split and unsplit sides of stack",
     ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
-    #Key([mod, "control"], "c", lazy.spawn(f"open_config.sh"), desc="Open qtile config in vim"), 
+    # Key([mod, "control"], "c", lazy.spawn(f"open_config.sh"), desc="Open qtile config in vim"),
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
-        [mod, "control"], "l",
+        [mod, "control"],
+        "l",
         lazy.spawn("i3lock-fancy -p"),
         desc="Launch i3lock-fancy",
     ),
     Key(
-        [mod, "control"], "f",
+        [mod, "control"],
+        "f",
         lazy.spawn(f"{terminal_run} vifm"),
         desc="Launch vifm",
     ),
+    Key(
+        [mod],
+        "b",
+        lazy.spawn(browser),
+        desc="Launch browser",
+    ),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # Volume control
-    Key([], "XF86AudioMute",
+    Key(
+        [],
+        "XF86AudioMute",
         lazy.widget["pulsevolume"].mute(),
     ),
-    Key([], "XF86AudioLowerVolume",
+    Key(
+        [],
+        "XF86AudioLowerVolume",
         lazy.widget["pulsevolume"].decrease_vol(),
     ),
-    Key([], "XF86AudioRaiseVolume",
+    Key(
+        [],
+        "XF86AudioRaiseVolume",
         lazy.widget["pulsevolume"].increase_vol(),
     ),
 ]
@@ -131,9 +165,10 @@ for i in groups:
     )
 
 layouts = [
-    #layout.Columns(),
-    layout.MonadTall(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=2),
+    # layout.Columns(),
+    layout.MonadTall(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=3),
     layout.Max(),
+    layout.Floating(),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -146,100 +181,34 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-icon_path = Path("/usr/share/icons/Yaru-dark/24x24/panel/")
-
-widget_defaults = dict(
-    font="fira sans",
-    fontsize=15,
-    padding=8,
-    theme_path=icon_path,
-    decorations=[
-        RectDecoration(colour="#003366", radius=5, filled=True, padding_y=2)
-    ],
-)
-extension_defaults = widget_defaults.copy()
-
-
+# Setup screen with widgets
 screens = [
     Screen(
         top=bar.Bar(
-            [
-                widget.CurrentLayout(),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
-                widget.StatusNotifier(icon_theme=icon_path),
-                widget.CheckUpdates(
-                    distro='Ubuntu',
-                    no_update_string="↻",
-                    display_format="↻ {updates}",
-                    restart_indicator="!",
-                    update_interval=600,
-                    execute=f"{terminal_hold} apt list --upgradable",
-                ),
-                widget.KeyboardLayout(
-                    configured_keyboards = [
-                        "us dvorak",
-                        "se svdvorak",
-                        "se",
-                    ],
-                    display_map={
-                        "us dvorak":"en",
-                        "se svdvorak":"sv dv",
-                        "se":"sv",
-                    },
-                    option="caps:ctrl_modifier",
-                ),
-                widget.OpenWeather(
-                    location="Luleå, SE",
-                    format="{location_city}: {main_temp:.0f} °{units_temperature}",
-                    update_interval=300,
-                ),
-                #widget.Systray(),
-                widget.Clock(format="%a %Y-%m-%d | %H:%M"),
-                #vc.Widget(mode='icon'),
-                widget.PulseVolume(
-                    emoji=True,
-                    theme_path=None,
-                    #theme_path=icon_path.parents[2] / "16x16/panel",
-                    mute_command=[
-                        'amixer',
-                        '-q',
-                        'set',
-                        'Master',
-                        'toggle',
-                    ],
-                ),
-                widget.Bluetooth(),
-                widget.UPowerWidget(),
-                #widget.WiFiIcon(interface="wlp58s0", active_color="ffffff"),
-                #widget.BatteryIcon(),
-                #widget.Battery(
-                #    format="{percent:2.0%}",
-                #),
-                widget.QuickExit(
-                    font="fira code",
-                    default_text='[X]',
-                    countdown_format='[{}]',
-                ),
-            ],
+            widgets,
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
+            border_width=[0, 0, 5, 0],
+            background="#00000000",
+            border_color="#00000000",
         ),
+        wallpaper='/usr/share/backgrounds/canvas_by_roytanck.jpg',
+        wallpaper_mode="stretch",
     ),
 ]
 
 # Drag floating layouts.
 mouse = [
-    Drag([mod], "Button1", lazy.window.set_position_floating(), start=lazy.window.get_position()),
-    Drag([mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()),
+    Drag(
+        [mod],
+        "Button1",
+        lazy.window.set_position_floating(),
+        start=lazy.window.get_position(),
+    ),
+    Drag(
+        [mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()
+    ),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
