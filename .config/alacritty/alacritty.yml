@@ -3,6 +3,10 @@ window:
 
 # Yaru colors
 colors:
+  primary:
+    background: "#2c001e"
+    foreground: "#f7f7f7"
+
   normal:
     black:   '#181818'
     red:     '#c7162b'
@@ -12,6 +16,9 @@ colors:
     magenta: '#762572'
     cyan:    '#007aa6'
     white:   '#f7f7f7'
+
+  transparent_background_colors: true
+
 
 font:
   normal:
