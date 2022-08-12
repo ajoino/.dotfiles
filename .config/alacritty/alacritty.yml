@@ -37,3 +37,6 @@ font:
     family: "fira code"
     style: Bold Italic
 
+
+shell:
+  program: /usr/bin/fish

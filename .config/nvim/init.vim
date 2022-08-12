@@ -28,6 +28,7 @@ au ColorScheme * hi EndOfBuffer ctermbg=none guibg=none
 au ColorScheme * hi StatusLine ctermbg=darkmagenta guibg=darkmagenta
 au ColorScheme * hi LineNr ctermbg=none guibg=none
 
+au FileType fish colorscheme fish-default
 
 " :Rpdf command to read pdfs
 :command! -complete=file -nargs=1 Rpdf :r !pdftotext -nopgbrk <q-args> -
@@ -45,6 +46,7 @@ Plug 'rakr/vim-one'
 Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
 Plug 'sjl/badwolf'
+Plug 'nickeb96/fish.vim'
 Plug 'maverickg/stan.vim', {'for': 'stan'}
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
 Plug 'davidhalter/jedi-vim'
