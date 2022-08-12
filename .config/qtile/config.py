@@ -46,7 +46,7 @@ qtile_config_dir = Path("~/.config/qtile/").expanduser()
 
 @hook.subscribe.startup_once
 def autostart():
-    subprocess.call([qtile_config_dir / "autostart.sh"])
+    subprocess.run([qtile_config_dir / "autostart.sh"])
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -186,15 +186,12 @@ screens = [
     Screen(
         top=bar.Bar(
             widgets,
-            24,
-            # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-            # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-            border_width=[0, 0, 5, 0],
+            28,
+            border_width=[3, 0, 0, 0],
+            # These colors make the bar transparent
             background="#00000000",
             border_color="#00000000",
         ),
-        wallpaper='/usr/share/backgrounds/canvas_by_roytanck.jpg',
-        wallpaper_mode="stretch",
     ),
 ]
 

@@ -1,6 +1,18 @@
 window:
   opacity: 0.9
 
+# Yaru colors
+colors:
+  normal:
+    black:   '#181818'
+    red:     '#c7162b'
+    green:   '#0e8420'
+    yellow:  '#f99B11'
+    blue:    '#19b6ee'
+    magenta: '#762572'
+    cyan:    '#007aa6'
+    white:   '#f7f7f7'
+
 font:
   normal:
     family: "fira code"
