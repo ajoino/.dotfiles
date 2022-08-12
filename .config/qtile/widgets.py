@@ -96,7 +96,7 @@ widgets = [
     # widget.Systray(),
     separator(),
     widget.Clock(
-        format="%a %Y-%m-%d | %H:%M",
+        format="%a %b %d | %H:%M",
         decorations=[widget_fill(0)],
     ),
     # vc.Widget(mode='icon'),

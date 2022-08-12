@@ -102,7 +102,7 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
-        [mod, "control"],
+        [mod, "shift"],
         "l",
         lazy.spawn("i3lock-fancy -p"),
         desc="Launch i3lock-fancy",
@@ -135,6 +135,10 @@ keys = [
         [],
         "XF86AudioRaiseVolume",
         lazy.widget["pulsevolume"].increase_vol(),
+    ),
+    Key(
+        [], "Print",
+        lazy.spawn('gnome-screenshot -i')
     ),
 ]
 
