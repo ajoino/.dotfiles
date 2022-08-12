@@ -9,6 +9,7 @@ set cursorline
 set title
 set confirm
 set wrap lbr
+filetype on
 filetype plugin on
 filetype indent on
 set showbreak=..
@@ -89,6 +90,15 @@ au Filetype python set
 			\ foldenable
 			\ foldmethod=indent
 			\ foldlevel=99
+
+au Filetype fish set
+			\ tabstop=2
+			\ softtabstop=2
+			\ shiftwidth=2
+			\ expandtab
+			\ autoindent
+			\ smarttab
+			\ fileformat=unix
 
 let g:pyindent_open_paren = '&sw * 2'
 let g:pyindent_continue = '&sw * 2'
