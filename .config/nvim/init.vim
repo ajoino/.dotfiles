@@ -24,12 +24,12 @@ set path+=**
 set wildmenu
 
 " Transparent background
-au ColorScheme * hi Normal ctermbg=none guibg=none
-au ColorScheme * hi EndOfBuffer ctermbg=none guibg=none
-au ColorScheme * hi StatusLine ctermbg=darkmagenta guibg=darkmagenta
-au ColorScheme * hi LineNr ctermbg=none guibg=none
+ au ColorScheme * hi Normal ctermbg=none guibg=none
+ au ColorScheme * hi EndOfBuffer ctermbg=none guibg=none
+ au ColorScheme * hi StatusLine ctermbg=darkmagenta guibg=darkmagenta
+ au ColorScheme * hi LineNr ctermbg=none guibg=none
 
-au FileType fish colorscheme fish-default
+ au FileType fish colorscheme fish-default
 
 " :Rpdf command to read pdfs
 :command! -complete=file -nargs=1 Rpdf :r !pdftotext -nopgbrk <q-args> -
@@ -47,6 +47,8 @@ Plug 'rakr/vim-one'
 Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
 Plug 'sjl/badwolf'
+Plug 'yonlu/omni.vim'
+Plug 'folke/tokyonight.nvim', {'branch': 'main'}
 Plug 'nickeb96/fish.vim'
 Plug 'maverickg/stan.vim', {'for': 'stan'}
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
@@ -90,6 +92,8 @@ au Filetype python set
 			\ foldenable
 			\ foldmethod=indent
 			\ foldlevel=99
+let g:pyindent_open_paren = '&sw'
+let g:pyindent_continue = '&sw'
 
 au Filetype fish set
 			\ tabstop=2
@@ -100,17 +104,16 @@ au Filetype fish set
 			\ smarttab
 			\ fileformat=unix
 
-let g:pyindent_open_paren = '&sw * 2'
-let g:pyindent_continue = '&sw * 2'
-
-nnoremap <space> za
-
 au Filetype tex set
 			\ tabstop=4
 			\ softtabstop=4
 			\ shiftwidth=4
 			\ autoindent
 			\ conceallevel=2
+            \ expandtab
+            \ smarttab
+            \ fileformat=unix
+
 let g:netrw_liststyle=3
 let g:vimtex_enable=1
 let g:vimtex_quickfix_mode=0
@@ -151,5 +154,7 @@ nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
 nnoremap <right> <nop>
+
+nnoremap <space> za
 
 abbrev teh the

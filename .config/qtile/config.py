@@ -165,14 +165,20 @@ for i in groups:
             # # mod1 + shift + letter of group = move focused window to group
             # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
             #     desc="move focused window to group {}".format(i.name)),
+            Key(
+                [mod, "control"],
+                i.name,
+                lazy.window.togroup(i.name),
+                desc="Move focused window to group {}".format(i.name),
+            ),
         ]
     )
 
 layouts = [
     # layout.Columns(),
-    layout.MonadTall(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=3),
+    layout.MonadTall(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=2),
     layout.Max(),
-    layout.Floating(),
+        layout.Floating(border_focus="#E95420", border_width=2,),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -228,6 +234,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(title="splash"), # Pycharm initial pop-up
     ]
 )
 auto_fullscreen = True

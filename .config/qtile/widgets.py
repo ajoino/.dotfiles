@@ -38,11 +38,13 @@ right_box = [0, corner_radius, corner_radius, 0]
 widgets = [
     separator(4),
     widget.CurrentLayout(
-        decorations=[widget_fill(left_box)]
+        decorations=[widget_fill(left_box)],
     ),
     separator(),
     widget.GroupBox(
-        decorations=[widget_fill(right_box)]
+        decorations=[widget_fill(right_box)],
+        highlight_method='text',
+        this_current_screen_border="#ffaa00",
     ),
     separator(),
     widget.Prompt(),
@@ -118,6 +120,8 @@ widgets = [
     #widget.Bluetooth(),
     separator(),
     widget.UPowerWidget(
+        border_color='#dbdbe0',
+        border_charge_colour="#E95420",
         battery_height=12,
         battery_width=20,
         margin=5,
