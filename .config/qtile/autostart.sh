@@ -3,6 +3,6 @@
 xset -dpms &
 xset -q &
 # picom enables transparent tiles
-picom -b
+picom -b --experimental-backends
 # nitrogen for backgrounds
 nitrogen --restore &
