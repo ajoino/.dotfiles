@@ -19,7 +19,8 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set list
-set listchars=tab:>.,trail:.,extends:#,nbsp:.
+" Read 'help listchars' for more info
+set listchars=tab:\|\ ,trail:.,extends:#,nbsp:.,multispace:.,
 set path+=**
 set wildmenu
 
@@ -79,7 +80,15 @@ let ncm2#popup_delay = 5
 let ncm2#complete_length = [[1, 1]]
 " Use new fuzzy based matches
 let g:ncm2#matcher = 'substrfuzzy'
-" Python specific configuration, follows some parts of PEP8
+
+au Filetype vim set
+			\ tabstop=4
+			\ softtabstop=4
+			\ shiftwidth=4
+			\ autoindent
+			\ smarttab
+
+" .py
 au Filetype python set
 			\ tabstop=4
 			\ softtabstop=4
@@ -95,31 +104,6 @@ au Filetype python set
 let g:pyindent_open_paren = '&sw'
 let g:pyindent_continue = '&sw'
 
-au Filetype fish set
-			\ tabstop=2
-			\ softtabstop=2
-			\ shiftwidth=2
-			\ expandtab
-			\ autoindent
-			\ smarttab
-			\ fileformat=unix
-
-au Filetype tex set
-			\ tabstop=4
-			\ softtabstop=4
-			\ shiftwidth=4
-			\ autoindent
-			\ conceallevel=2
-            \ expandtab
-            \ smarttab
-            \ fileformat=unix
-
-let g:netrw_liststyle=3
-let g:vimtex_enable=1
-let g:vimtex_quickfix_mode=0
-let g:tex_flavor='latex'
-let g:tex_conceal='abdmg'
-hi conceal guibg=gray12 guifg=orange
 let g:jedi#auto_initialization = 1
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
@@ -131,13 +115,43 @@ let g:jedi#show_call_signatures_delay = 0
 let g:jedi#use_splits_not_buffers = 0
 let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 let g:jedi#enable_speed_debugging=0
+let g:semshi#no_default_builtin_highlight = v:true
+
+" .fish
+au Filetype fish set
+			\ tabstop=2
+			\ softtabstop=2
+			\ shiftwidth=2
+			\ expandtab
+			\ autoindent
+			\ smarttab
+			\ fileformat=unix
+
+" .tex
+au Filetype tex set
+			\ tabstop=4
+			\ softtabstop=4
+			\ shiftwidth=4
+			\ autoindent
+			\ conceallevel=2
+            \ expandtab
+            \ smarttab
+            \ fileformat=unix
+
+let g:vimtex_enable=1
+let g:vimtex_quickfix_mode=0
+let g:tex_flavor='latex'
+let g:tex_conceal='abdmg'
+hi conceal guibg=gray12 guifg=orange
+
+let g:netrw_liststyle=3
+
 
 au Filetype markdown set conceallevel=2
 let g:vim_markdown_folding_disabled=1
 
 let g:UltisnipsExpandTrigger = '<tab>'
 
-let g:semshi#no_default_builtin_highlight = v:true
 
 let g:languagetool_jar = '$HOME/LanguageTool-4.9.1/languagetool-commandline.jar'
 
