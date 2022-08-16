@@ -20,7 +20,7 @@ set softtabstop=4
 set shiftwidth=4
 set list
 " Read 'help listchars' for more info
-set listchars=tab:\|\ ,trail:.,extends:#,nbsp:.,multispace:.,
+set listchars=tab:\|\ ,trail:.,extends:#,nbsp:.,multispace:.,lead:\ ,
 set path+=**
 set wildmenu
 
