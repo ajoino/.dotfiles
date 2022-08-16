@@ -1,11 +1,11 @@
-mod_key = "mod4"
+mod_key = "mod1"
 browser = "firefox"
 file_manager = "vifm"
 
 autostart_applications = [
     # xset commands disable screen saver
-    "xset -dpms &",
-    "xset -q &",
+    "xset s off",
+    "xset -dpms",
     # picom enables transparent tiles
     "picom -b --experimental-backends",
     # nitrogen for backgrounds

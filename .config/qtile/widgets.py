@@ -4,6 +4,8 @@ from libqtile import bar
 from qtile_extras import widget
 from qtile_extras.widget.decorations import RectDecoration
 
+from preferences import preferences as pref
+
 icon_path = Path("/usr/share/icons/Yaru-dark/24x24/panel/")
 
 widget_defaults = dict(
@@ -26,7 +28,7 @@ def separator(width=2):
 
 def widget_fill(radius=corner_radius):
     return RectDecoration(
-        colour="#2C001E",
+        colour=pref.palette["purple_5"] + "b0",
         radius=radius,
         filled=True,
         padding_y=2,
@@ -106,14 +108,7 @@ widgets = [
     widget.PulseVolume(
         emoji=True,
         theme_path=None,
-        # theme_path=icon_path.parents[2] / "16x16/panel",
-        mute_command=[
-            "amixer",
-            "-q",
-            "set",
-            "Master",
-            "toggle",
-        ],
+        #theme_path=icon_path,
         decorations=[widget_fill(0)],
     ),
     #separator(),

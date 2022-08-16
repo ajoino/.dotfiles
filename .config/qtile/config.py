@@ -31,8 +31,9 @@ from pathlib import Path
 from libqtile import bar, layout, hook
 from libqtile.config import Click, Drag, Match, Screen
 from libqtile.lazy import lazy
+from libqtile.log_utils import logger
 
-from widgets import widgets
+from widgets import widgets, widget_defaults, extension_defaults
 from preferences import preferences as pref
 from key_bindings import keys as keys
 from groups import groups
@@ -42,7 +43,10 @@ mod = pref.mod_key
 @hook.subscribe.startup_once
 def autostart():
     for command in pref.autostart_applications:
-        subprocess.run(command.split())
+        res = subprocess.run(command.split())
+        if res.returncode != 0:
+            logger.warning(f"Command {res.args} returned a non-zero returncode:")
+            logger.warning(res.stderr)
 
 layouts = [
     # layout.Columns(),

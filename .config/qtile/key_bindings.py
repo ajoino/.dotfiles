@@ -106,7 +106,7 @@ keys = [
         lazy.spawn(pref.browser),
         desc="Launch browser",
     ),
-    Key([mod, "mod1"], "Return", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key([mod, "mod4"], "Return", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     # Volume control
     Key(
         [],
