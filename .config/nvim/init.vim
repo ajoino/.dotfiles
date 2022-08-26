@@ -1,8 +1,9 @@
+set encoding=utf-8
+scriptencoding utf-8
 let g:python3_host_prog = "/usr/bin/python3"
 set nocompatible
 set number relativenumber
 syntax on
-set encoding=utf-8
 set ruler
 set breakindent
 set cursorline
@@ -20,7 +21,7 @@ set softtabstop=4
 set shiftwidth=4
 set list
 " Read 'help listchars' for more info
-set listchars=tab:\|\ ,trail:.,extends:#,nbsp:.,multispace:.,lead:\ ,
+set listchars=tab:\|\ ,trail:.,extends:#,nbsp:. " ,multispace:\ ,lead:\ 
 set path+=**
 set wildmenu
 
@@ -45,6 +46,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'tpope/vim-surround'
 Plug 'rakr/vim-one'
+Plug 'cespare/vim-toml', { 'branch': 'main' }
 Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
 Plug 'sjl/badwolf'
@@ -68,6 +70,7 @@ Plug 'dpelle/vim-LanguageTool'
 Plug 'neovimhaskell/haskell-vim'
 " To save with sudo priviliges
 Plug 'lambdalisue/suda.vim'
+Plug 'taketwo/vim-ros'
 call plug#end()
 
 " ncm2 settings
@@ -87,6 +90,15 @@ au Filetype vim set
 			\ shiftwidth=4
 			\ autoindent
 			\ smarttab
+
+au Filetype toml set
+			\ tabstop=4
+			\ softtabstop=4
+			\ shiftwidth=4
+			\ expandtab
+			\ autoindent
+			\ smarttab
+			\ fileformat=unix
 
 " .py
 au Filetype python set
@@ -122,8 +134,8 @@ au Filetype fish set
 			\ tabstop=2
 			\ softtabstop=2
 			\ shiftwidth=2
-			\ expandtab
 			\ autoindent
+			\ expandtab
 			\ smarttab
 			\ fileformat=unix
 
