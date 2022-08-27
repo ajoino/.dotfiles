@@ -40,19 +40,52 @@ from groups import groups
 
 mod = pref.mod_key
 
+def log_subprocess_error(res: subprocess.CompletedProcess):
+    logger.warning(f"Command {res.args} returned a non-zero returncode:")
+    logger.warning(res.stderr)
+
+
+
 @hook.subscribe.startup_once
 def autostart():
     for command in pref.autostart_applications:
         res = subprocess.run(command.split())
         if res.returncode != 0:
-            logger.warning(f"Command {res.args} returned a non-zero returncode:")
-            logger.warning(res.stderr)
+            log_subprocess_error(res)
+
+@hook.subscribe.startup
+def startup():
+    touchpads = map(
+        # Extract the name of the touchpad
+        lambda t: b" ".join(t.split()[2:5]),
+        filter(
+            # filter out touchpad devices
+            lambda s: "touchpad" in s.decode().lower(),
+                # Get list of input devices from xinput
+                subprocess.run(
+                    "xinput list".split(),
+                    capture_output=True).stdout.splitlines()
+        )
+    )
+
+    for touchpad in touchpads:
+        touchpad_string = touchpad.decode()
+        res = subprocess.run(["xinput", "set-prop", touchpad_string, 'libinput Tapping Enabled', "1"], capture_output=True)
+        if res.returncode != 0:
+            log_subprocess_error(res)
+        res = subprocess.run(["xinput", "set-prop",touchpad_string, 'libinput Natural Scrolling Enabled', "1"], capture_output=True)
+        if res.returncode != 0:
+            log_subprocess_error(res)
+        res = subprocess.run(["xinput", "set-prop",touchpad_string, 'libinput Middle Emulation Enabled', "1"], capture_output=True)
+        if res.returncode != 0:
+            log_subprocess_error(res)
 
 layouts = [
     # layout.Columns(),
     layout.MonadTall(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=2),
     layout.Max(),
         layout.Floating(border_focus="#E95420", border_width=2,),
+    layout.MonadThreeCol(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=2),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -92,6 +125,12 @@ mouse = [
     ),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
+
+@hook.subscribe.screen_change
+def restart_on_randr(qtile, ev):
+    # TODO only if numbers of screens changed
+    subprocess.run("~/.screenlayout/laptop-only.sh")
+    qtile.cmd_restart()
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
