@@ -7,7 +7,7 @@ autostart_applications = [
     "xset s off",
     "xset -dpms",
     # picom enables transparent tiles
-    "picom -b --experimental-backends",
+    "picom -b --vsync",
     # nitrogen for backgrounds
     "nitrogen --restore &",
 ]
