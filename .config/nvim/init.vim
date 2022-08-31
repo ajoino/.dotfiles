@@ -24,6 +24,7 @@ set list
 set listchars=tab:\|\ ,trail:.,extends:#,nbsp:. " ,multispace:\ ,lead:\ 
 set path+=**
 set wildmenu
+set termguicolors
 
 " Transparent background
  au ColorScheme * hi Normal ctermbg=none guibg=none
@@ -68,10 +69,13 @@ Plug 'iamcco/markdown-preview.nvim', {'do': { -> mkdp#util#install()}, 'for': ['
 Plug 'dpelle/vim-LanguageTool'
 " Haskell
 Plug 'neovimhaskell/haskell-vim'
+Plug 'jeetsukumaran/vim-python-indent-black'
 " To save with sudo priviliges
 Plug 'lambdalisue/suda.vim'
 Plug 'taketwo/vim-ros'
+Plug 'vimplug/nvim-colorizer.lua'
 call plug#end()
+lua require'colorizer'.setup()
 
 " ncm2 settings
 autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -100,6 +104,15 @@ au Filetype toml set
 			\ smarttab
 			\ fileformat=unix
 
+au Filetype xml set
+			\ tabstop=2
+			\ softtabstop=2
+			\ shiftwidth=2
+			\ expandtab
+			\ autoindent
+			\ smarttab
+			\ fileformat=unix
+
 " .py
 au Filetype python set
 			\ tabstop=4
@@ -113,8 +126,9 @@ au Filetype python set
 			\ foldenable
 			\ foldmethod=indent
 			\ foldlevel=99
-let g:pyindent_open_paren = '&sw'
-let g:pyindent_continue = '&sw'
+
+" let g:pyindent_open_paren = '&sw'
+" let g:pyindent_continue = '&sw'
 
 let g:jedi#auto_initialization = 1
 let g:jedi#completions_enabled = 0
@@ -167,7 +181,6 @@ let g:UltisnipsExpandTrigger = '<tab>'
 
 let g:languagetool_jar = '$HOME/LanguageTool-4.9.1/languagetool-commandline.jar'
 
-set termguicolors
 colorscheme badwolf
 
 " Movement commands
