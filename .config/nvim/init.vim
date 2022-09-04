@@ -38,55 +38,258 @@ set termguicolors
 :command! -complete=file -nargs=1 Rpdf :r !pdftotext -nopgbrk <q-args> -
 
 call plug#begin('~/.config/nvim/plugged')
-Plug 'da-h/AirLatex.vim', {'do': ':UpdateRemotePlugins'}
-Plug 'lervag/vimtex', {'for': 'tex'}
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
-Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'tpope/vim-surround'
-Plug 'rakr/vim-one'
-Plug 'cespare/vim-toml', { 'branch': 'main' }
-Plug 'lifepillar/vim-solarized8'
-Plug 'kaicataldo/material.vim'
-Plug 'sjl/badwolf'
-Plug 'yonlu/omni.vim'
-Plug 'folke/tokyonight.nvim', {'branch': 'main'}
-Plug 'nickeb96/fish.vim'
-Plug 'maverickg/stan.vim', {'for': 'stan'}
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
-Plug 'davidhalter/jedi-vim'
-Plug 'ncm2/ncm2', {'for': 'python'}
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-jedi'
-" Words in buffer completion
-Plug 'ncm2/ncm2-bufword'
-" Filepath completion
-Plug 'ncm2/ncm2-path'
-Plug 'mrtazz/simplenote.vim'
-Plug 'iamcco/markdown-preview.nvim', {'do': { -> mkdp#util#install()}, 'for': ['markdown', '', 'vim-plug']}
-Plug 'dpelle/vim-LanguageTool'
-" Haskell
-Plug 'neovimhaskell/haskell-vim'
-Plug 'jeetsukumaran/vim-python-indent-black'
-" To save with sudo priviliges
-Plug 'lambdalisue/suda.vim'
-Plug 'taketwo/vim-ros'
-Plug 'vimplug/nvim-colorizer.lua'
+	Plug 'da-h/AirLatex.vim', {'do': ':UpdateRemotePlugins'}
+	Plug 'lervag/vimtex', {'for': 'tex'}
+	Plug 'godlygeek/tabular'
+	Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+	Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
+	Plug 'SirVer/ultisnips'
+	Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+	Plug 'honza/vim-snippets'
+	Plug 'tpope/vim-surround'
+	Plug 'rakr/vim-one'
+	Plug 'Th3Whit3Wolf/one-nvim'
+	Plug 'cespare/vim-toml', { 'branch': 'main' }
+	Plug 'lifepillar/vim-solarized8'
+	Plug 'kaicataldo/material.vim'
+	Plug 'sjl/badwolf'
+	Plug 'yonlu/omni.vim'
+	Plug 'folke/tokyonight.nvim', {'branch': 'main'}
+	Plug 'nickeb96/fish.vim'
+	Plug 'maverickg/stan.vim', {'for': 'stan'}
+	" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
+	" Plug 'davidhalter/jedi-vim'
+	" Plug 'ncm2/ncm2', {'for': 'python'}
+	" Plug 'roxma/nvim-yarp'
+	" Plug 'ncm2/ncm2-jedi'
+	" Words in buffer completion
+	" Plug 'ncm2/ncm2-bufword'
+	" Filepath completion
+	" Plug 'ncm2/ncm2-path'
+	Plug 'mrtazz/simplenote.vim'
+	Plug 'iamcco/markdown-preview.nvim', {'do': { -> mkdp#util#install()}, 'for': ['markdown', '', 'vim-plug']}
+	Plug 'dpelle/vim-LanguageTool'
+	" Haskell
+	Plug 'neovimhaskell/haskell-vim'
+	Plug 'jeetsukumaran/vim-python-indent-black'
+	" To save with sudo priviliges
+	Plug 'lambdalisue/suda.vim'
+	Plug 'taketwo/vim-ros'
+	Plug 'vimplug/nvim-colorizer.lua'
+	Plug 'neovim/nvim-lspconfig'
+	Plug 'hrsh7th/cmp-nvim-lsp'
+	Plug 'hrsh7th/cmp-buffer'
+	Plug 'hrsh7th/cmp-path'
+	Plug 'hrsh7th/cmp-cmdline'
+	Plug 'hrsh7th/nvim-cmp'
+	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+	Plug 'kyazdani42/nvim-web-devicons'
+	Plug 'kyazdani42/nvim-tree.lua'
+    Plug 'p00f/nvim-ts-rainbow'
+	Plug 'lewis6991/gitsigns.nvim'
 call plug#end()
+
 lua require'colorizer'.setup()
 
-" ncm2 settings
-autocmd BufEnter * call ncm2#enable_for_buffer()
-set completeopt=menuone,noselect,noinsert
+set completeopt=menu,menuone,noselect,noinsert
 set shortmess+=c
 inoremap <c-c> <ESC>
-" make it fast
-let ncm2#popup_delay = 5
-let ncm2#complete_length = [[1, 1]]
-" Use new fuzzy based matches
-let g:ncm2#matcher = 'substrfuzzy'
+
+lua <<EOF
+  -- Setup nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+        vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      end,
+    },
+    window = {
+      -- completion = cmp.config.window.bordered(),
+      -- documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      -- { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+  -- Mappings.
+  -- See `:help vim.diagnostic.*` for documentation on any of the below
+  local opts = { noremap=true, silent=true }
+  vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+  vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local bufopts = { noremap=true, silent=true, buffer=bufnr }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+    vim.keymap.set('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, bufopts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+    vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+  end
+
+  -- Set configuration for specific filetype.
+  cmp.setup.filetype('gitcommit', {
+    sources = cmp.config.sources({
+      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(),
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  -- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+  require('lspconfig')['pylsp'].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = lsp_flags,
+  }
+  require('lspconfig')['vimls'].setup {
+	  capabilities=capabilities,
+      on_attach = on_attach,
+	  flags = lsp_flags,
+  }
+  require('lspconfig')['clangd'].setup {
+	  capabilities=capabilities,
+      on_attach = on_attach,
+	  flags = lsp_flags,
+  }
+
+  -- TreeSitter config
+  require'nvim-treesitter.configs'.setup {
+    -- A directory to install the parsers into.
+    -- If this is excluded or nil parsers are installed
+    -- to either the package dir, or the "site" dir.
+    -- If a custom path is used (not nil) it must be added to the runtimepath.
+
+    -- A list of parser names, or "all"
+    ensure_installed = "all",
+
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+
+    -- Automatically install missing parsers when entering buffer
+    auto_install = false,
+
+    -- List of parsers to ignore installing (for "all")
+     ignore_install = { "" },
+
+    highlight = {
+      -- `false` will disable the whole extension
+      enable = true,
+
+      -- list of language that will be disabled
+      -- disable = { "c", "rust" },
+
+      -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+      -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+      -- Using this option may slow down your editor, and you may see some duplicate highlights.
+      -- Instead of true it can also be a list of languages
+      additional_vim_regex_highlighting = false,
+    },
+    rainbow = {
+        enable = true,
+        extended_mode = true,
+        max_file_lines = nil,
+    }
+  }
+  vim.opt.runtimepath:append("")
+  require("nvim-tree").setup()
+  require('gitsigns').setup {
+    signs = {
+  	add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+  	change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  	delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+  	topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+  	changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    },
+    signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+    numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
+    linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+    word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+    watch_gitdir = {
+  	interval = 1000,
+  	follow_files = true
+    },
+    attach_to_untracked = true,
+    current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
+    current_line_blame_opts = {
+  	virt_text = true,
+  	virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+  	delay = 1000,
+  	ignore_whitespace = false,
+    },
+    current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+    sign_priority = 6,
+    update_debounce = 100,
+    status_formatter = nil, -- Use default
+    max_file_length = 40000, -- Disable if file is longer than this (in lines)
+    preview_config = {
+  	-- Options passed to nvim_open_win
+  	border = 'single',
+  	style = 'minimal',
+  	relative = 'cursor',
+  	row = 0,
+  	col = 1
+    },
+    yadm = {
+  	enable = false
+    },
+  }
+EOF
 
 au Filetype vim set
 			\ tabstop=4
@@ -141,7 +344,6 @@ let g:jedi#show_call_signatures_delay = 0
 let g:jedi#use_splits_not_buffers = 0
 let g:jedi#show_call_signatures_modes = 'ni'  " ni = also in normal mode
 let g:jedi#enable_speed_debugging=0
-let g:semshi#no_default_builtin_highlight = v:true
 
 " .fish
 au Filetype fish set
@@ -181,7 +383,7 @@ let g:UltisnipsExpandTrigger = '<tab>'
 
 let g:languagetool_jar = '$HOME/LanguageTool-4.9.1/languagetool-commandline.jar'
 
-colorscheme badwolf
+colorscheme one-nvim
 
 " Movement commands
 nnoremap j gj
