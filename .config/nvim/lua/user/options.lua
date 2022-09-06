@@ -29,11 +29,12 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.numberwidth = 4
 vim.opt.signcolumn = "yes"
-vim.opt.wrap = true
+vim.opt.wrap = false
 vim.opt.scrolloff = 8
--- vim.opt.sidescrolloff = 8
+vim.opt.sidescrolloff = 8
 
 vim.opt.shortmess:append "c"
+vim.g.material_style = "deep ocean"
 
 -- vim.cmd "set whichwrap+=<,>,[,],h,l"
 -- vim.cmd [[set iskeyword+=-]]
