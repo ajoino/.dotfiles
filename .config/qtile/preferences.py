@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import TypedDict
 from typing_extensions import Self
 from pathlib import Path
+
 try:
     import tomllib as toml
 except ImportError:
@@ -11,10 +12,12 @@ except ImportError:
 
 _default = Path("~/.config/qtile/preferences.toml").expanduser()
 
+
 class _TerminalPreferences(TypedDict):
     application: str
     run_command: str
     run_command_hold: str
+
 
 class _Preferences(TypedDict):
     mod_key: str
@@ -25,9 +28,10 @@ class _Preferences(TypedDict):
     palette: dict[str, str]
 
 
-def _read_preferences(preferences_path: Path=_default) -> _Preferences:
-    with open(preferences_path, 'rb') as pref_file:
+def _read_preferences(preferences_path: Path = _default) -> _Preferences:
+    with open(preferences_path, "rb") as pref_file:
         return toml.load(pref_file)
+
 
 class Preferences:
     @dataclass
@@ -43,5 +47,6 @@ class Preferences:
         self.autostart_applications = toml_data["autostart_applications"]
         self.terminal = self.Terminal(**toml_data["terminal"])
         self.palette = toml_data["palette"]
+
 
 preferences = Preferences(_read_preferences(_default))

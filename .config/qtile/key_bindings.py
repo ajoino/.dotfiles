@@ -25,13 +25,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pathlib import Path
-
-from libqtile.config import Group, Key
-from libqtile.lazy import lazy
+from libqtile.config import Key  # type: ignore
+from libqtile.lazy import lazy  # type: ignore
 
 from preferences import preferences as pref
-from groups import groups
 
 mod = pref.mod_key
 
@@ -44,7 +41,7 @@ keys = [
     Key([mod], "j", lazy.layout.down(), desc="Move focus down"),
     Key([mod], "k", lazy.layout.up(), desc="Move focus up"),
     Key(
-        [mod],
+        ["mod4"],
         "space",
         lazy.widget["keyboardlayout"].next_keyboard(),
         desc="Move window focus to other window",
@@ -84,12 +81,12 @@ keys = [
     Key([mod], "Return", lazy.spawn(pref.terminal.run), desc="Launch terminal"),
     # Key([mod, "control"], "c", lazy.spawn(f"open_config.sh"), desc="Open qtile config in vim"),
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod, "control"], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
-        [mod, "shift"],
+        [mod, "control"],
         "l",
         lazy.spawn("i3lock-fancy -p"),
         desc="Launch i3lock-fancy",
@@ -106,7 +103,12 @@ keys = [
         lazy.spawn(pref.browser),
         desc="Launch browser",
     ),
-    Key([mod, "mod4"], "Return", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
+    Key(
+        [mod, "mod4"],
+        "Return",
+        lazy.spawncmd(),
+        desc="Spawn a command using a prompt widget",
+    ),
     # Volume control
     Key(
         [],
@@ -124,39 +126,19 @@ keys = [
         lazy.widget["pulsevolume"].increase_vol(),
     ),
     Key(
-        [], "Print",
-        lazy.spawn('gnome-screenshot -i')
+        [],
+        "XF86AudioPlay",
+        lazy.spawn("playerctl play-pause"),
     ),
+    Key(
+        [],
+        "XF86AudioPrev",
+        lazy.spawn("playerctl previous"),
+    ),
+    Key(
+        [],
+        "XF86AudioNext",
+        lazy.spawn("playerctl next"),
+    ),
+    Key([], "Print", lazy.spawn("gnome-screenshot -i")),
 ]
-
-for i in groups:
-    keys.extend(
-        [
-            # mod1 + letter of group = switch to group
-            Key(
-                [mod],
-                i.name,
-                lazy.group[i.name].toscreen(),
-                desc="Switch to group {}".format(i.name),
-            ),
-            # mod1 + shift + letter of group = switch to & move focused window to group
-            Key(
-                [mod, "shift"],
-                i.name,
-                lazy.window.togroup(i.name, switch_group=True),
-                desc="Switch to & move focused window to group {}".format(i.name),
-            ),
-            # Or, use below if you prefer not to switch to that group.
-            # # mod1 + shift + letter of group = move focused window to group
-            # Key([mod, "shift"], i.name, lazy.window.togroup(i.name),
-            #     desc="move focused window to group {}".format(i.name)),
-            Key(
-                [mod, "control"],
-                i.name,
-                lazy.window.togroup(i.name),
-                desc="Move focused window to group {}".format(i.name),
-            ),
-        ]
-    )
-
-

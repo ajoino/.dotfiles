@@ -29,21 +29,21 @@ import subprocess
 from pathlib import Path
 
 from libqtile import bar, layout, hook
-from libqtile.config import Click, Drag, Match, Screen
+from libqtile.config import Click, Drag, Match, Screen, Key
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 
 from widgets import widgets, widget_defaults, extension_defaults
 from preferences import preferences as pref
 from key_bindings import keys as keys
-from groups import groups
+from groups import init_groups, init_group_names
 
 mod = pref.mod_key
+
 
 def log_subprocess_error(res: subprocess.CompletedProcess):
     logger.warning(f"Command {res.args} returned a non-zero returncode:")
     logger.warning(res.stderr)
-
 
 
 @hook.subscribe.startup_once
@@ -53,6 +53,7 @@ def autostart():
         if res.returncode != 0:
             log_subprocess_error(res)
 
+
 @hook.subscribe.startup
 def startup():
     touchpads = map(
@@ -61,31 +62,64 @@ def startup():
         filter(
             # filter out touchpad devices
             lambda s: "touchpad" in s.decode().lower(),
-                # Get list of input devices from xinput
-                subprocess.run(
-                    "xinput list".split(),
-                    capture_output=True).stdout.splitlines()
-        )
+            # Get list of input devices from xinput
+            subprocess.run(
+                "xinput list".split(), capture_output=True
+            ).stdout.splitlines(),
+        ),
     )
 
     for touchpad in touchpads:
         touchpad_string = touchpad.decode()
-        res = subprocess.run(["xinput", "set-prop", touchpad_string, 'libinput Tapping Enabled', "1"], capture_output=True)
+        res = subprocess.run(
+            ["xinput", "set-prop", touchpad_string, "libinput Tapping Enabled", "1"],
+            capture_output=True,
+        )
         if res.returncode != 0:
             log_subprocess_error(res)
-        res = subprocess.run(["xinput", "set-prop",touchpad_string, 'libinput Natural Scrolling Enabled', "1"], capture_output=True)
+        res = subprocess.run(
+            [
+                "xinput",
+                "set-prop",
+                touchpad_string,
+                "libinput Natural Scrolling Enabled",
+                "1",
+            ],
+            capture_output=True,
+        )
         if res.returncode != 0:
             log_subprocess_error(res)
-        res = subprocess.run(["xinput", "set-prop",touchpad_string, 'libinput Middle Emulation Enabled', "1"], capture_output=True)
+        res = subprocess.run(
+            [
+                "xinput",
+                "set-prop",
+                touchpad_string,
+                "libinput Middle Emulation Enabled",
+                "1",
+            ],
+            capture_output=True,
+        )
         if res.returncode != 0:
             log_subprocess_error(res)
 
+
 layouts = [
     # layout.Columns(),
-    layout.MonadTall(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=2),
+    layout.MonadTall(
+        border_focus="#E95420", border_normal="#00000000", border_width=2, margin=2
+    ),
     layout.Max(),
-        layout.Floating(border_focus="#E95420", border_width=2,),
-    layout.MonadThreeCol(border_focus="#E95420", border_normal="#00000000", border_width=2, margin=2),
+    layout.Floating(
+        border_focus="#E95420",
+        border_width=2,
+    ),
+    layout.MonadThreeCol(
+        border_focus="#E95420",
+        border_normal="#00000000",
+        border_width=2,
+        margin=2,
+        new_client_position="after_current",
+    ),
     # Try more layouts by unleashing below layouts.
     # layout.Stack(num_stacks=2),
     # layout.Bsp(),
@@ -97,6 +131,15 @@ layouts = [
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
+
+if __name__ in {"config", "__main__"}:
+    group_names = init_group_names()
+    groups = init_groups()
+
+    for i, (name, kwargs) in enumerate(group_names, 1):
+        keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
+        keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
+
 
 # Setup screen with widgets
 screens = [
@@ -126,11 +169,25 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
+
+@hook.subscribe.resume
+def lock_on_resume():
+    subprocess.run("i3lock-fancy -p")
+    logger.warn("Resuming from sleep")
+
+
 @hook.subscribe.screen_change
-def restart_on_randr(qtile, ev):
+def restart_on_randr(qtile):
     # TODO only if numbers of screens changed
-    subprocess.run("~/.screenlayout/laptop-only.sh")
+    subprocess.run(Path("$HOME/.screenlayout/laptop-only.sh").expanduser())
     qtile.cmd_restart()
+
+
+@hook.subscribe.screens_reconfigured
+def reset_layout():
+    logger.warn("Resetting screen layout")
+    lazy.spawn(Path("$HOME/.screenlayout/laptop-only.sh").expanduser())
+
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
@@ -147,7 +204,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-        Match(title="splash"), # Pycharm initial pop-up
+        Match(title="splash"),  # Pycharm initial pop-up
     ]
 )
 auto_fullscreen = True

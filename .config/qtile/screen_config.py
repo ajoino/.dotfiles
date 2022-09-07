@@ -12,9 +12,7 @@ widget_defaults = dict(
     fontsize=15,
     padding=8,
     theme_path=icon_path,
-    decorations=[
-        RectDecoration(colour="#2C001E", radius=5, filled=True, padding_y=2)
-    ],
+    decorations=[RectDecoration(colour="#2C001E", radius=5, filled=True, padding_y=2)],
 )
 extension_defaults = widget_defaults.copy()
 
