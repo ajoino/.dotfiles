@@ -6,9 +6,9 @@ import nerdfonts as nf
 
 def init_group_names():
     return [
-        (nf.icons.get("fa_firefox", "1"), {"layout": "max"}),
+        (nf.icons.get("mdi_firefox", "1"), {"layout": "max"}),
         (nf.icons.get("fa_terminal", "2"), {"layout": "monadtall"}),
-        (nf.icons.get("fa_envelope", "3"), {"layout": "max"}),
+        (nf.icons.get("mdi_email_outline", "3"), {"layout": "max"}),
         (nf.icons.get("fa_comment", "4"), {"layout": "max"}),
     ]
 

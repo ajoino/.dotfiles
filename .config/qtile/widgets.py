@@ -49,7 +49,7 @@ widgets = [
     separator(4),
     widget.GroupBox(
         decorations=[widget_fill(left_box)],
-        font="hack",
+        font="Fira Code Nerd Font",
         highlight_method="text",
         this_current_screen_border="#ffaa00",
         disable_drag=True,
