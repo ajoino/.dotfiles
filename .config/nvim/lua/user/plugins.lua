@@ -58,6 +58,10 @@ return packer.startup(function(use)
             require("nvim-surround").setup({})
         end
     }
+    use {
+        'iamcco/markdown-preview.nvim',
+        run = function() vim.fn["mkpd#util#install"]() end,
+    }
 
     -- Colorschemes
     use "lunarvim/darkplus.nvim"

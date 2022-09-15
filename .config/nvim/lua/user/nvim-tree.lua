@@ -32,7 +32,7 @@ nvim_tree.setup {
                     symlink_open = "",
                 },
                 git = {
-                    unstaged = "",
+                    unstaged = "⨯",
                     staged = "S",
                     unmerged = "",
                     renamed = "➜",
@@ -42,6 +42,12 @@ nvim_tree.setup {
                 },
             },
         },
+  -- set -l ahead    "↑"
+  -- set -l behind   "↓"
+  -- set -l diverged "⥄"
+  -- set -l dirty    "⨯"
+  -- set -l stash    "≡"
+  -- set -l none     "◦"
     },
     diagnostics = {
         enable = true,
