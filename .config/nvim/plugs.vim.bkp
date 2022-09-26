@@ -1,0 +1,38 @@
+call plug#begin('~/.config/nvim/plugged')
+Plug 'da-h/AirLatex.vim', {'do': ':UpdateRemotePlugins'}
+Plug 'lervag/vimtex', {'for': 'tex'}
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'tpope/vim-surround'
+Plug 'rakr/vim-one'
+Plug 'cespare/vim-toml', { 'branch': 'main' }
+Plug 'lifepillar/vim-solarized8'
+Plug 'kaicataldo/material.vim'
+Plug 'sjl/badwolf'
+Plug 'yonlu/omni.vim'
+Plug 'folke/tokyonight.nvim', {'branch': 'main'}
+Plug 'nickeb96/fish.vim'
+Plug 'maverickg/stan.vim', {'for': 'stan'}
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
+Plug 'davidhalter/jedi-vim'
+Plug 'ncm2/ncm2', {'for': 'python'}
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-jedi'
+" Words in buffer completion
+Plug 'ncm2/ncm2-bufword'
+" Filepath completion
+Plug 'ncm2/ncm2-path'
+Plug 'mrtazz/simplenote.vim'
+Plug 'iamcco/markdown-preview.nvim', {'do': { -> mkdp#util#install()}, 'for': ['markdown', '', 'vim-plug']}
+Plug 'dpelle/vim-LanguageTool'
+" Haskell
+Plug 'neovimhaskell/haskell-vim'
+Plug 'jeetsukumaran/vim-python-indent-black'
+" To save with sudo priviliges
+Plug 'lambdalisue/suda.vim'
+Plug 'taketwo/vim-ros'
+Plug 'vimplug/nvim-colorizer.lua'
+call plug#end()

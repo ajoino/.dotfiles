@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/jacob/flasheye/sia-simulator/src/sia_broker'
+let g:netrw_dirhist_5='/home/jacob/flasheye/sia-dc-09-spt/dc09_spt'
+let g:netrw_dirhist_4='/home/jacob/flasheye/sia-simulator'
+let g:netrw_dirhist_3='/home/jacob/.config/qtile'
+let g:netrw_dirhist_2='/home/jacob/.config/fish'
+let g:netrw_dirhist_1='/home/jacob/.config/fish/functions'

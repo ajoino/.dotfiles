@@ -35,6 +35,7 @@ vim.opt.sidescrolloff = 8
 
 vim.opt.shortmess:append "c"
 vim.g.material_style = "deep ocean"
+vim.g.do_filetype_lua = 1
 
 -- vim.cmd "set whichwrap+=<,>,[,],h,l"
 -- vim.cmd [[set iskeyword+=-]]
