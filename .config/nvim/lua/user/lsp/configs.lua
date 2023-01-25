@@ -1,7 +1,3 @@
-local mason_status_ok, mason = pcall(require, "mason")
-if not mason_status_ok then
-    return
-end
 local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_status_ok then
     return
@@ -10,28 +6,40 @@ local status_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
 if not status_ok then
 	return
 end
+local mason_null_status_ok, mason_null_ls = pcall(require, "mason-null-ls")
+if not mason_null_status_ok then
+    return
+end
 
 local servers = {
     "pylsp",
     "sumneko_lua",
     "clangd",
-    "dockerfile-language-server",
+    "dockerls",
 }
 
-opts = {
+local opts = {
     on_attach = require("user.lsp.handlers").on_attach,
     capabilities = require("user.lsp.handlers").capabilities,
 }
 
-mason.setup()
 mason_lspconfig.setup {
     ensure_installed = servers
 }
 mason_lspconfig.setup_handlers {
     function (server)
-        lspconfig[server].setup (opts)
+        local server_ok, server_opts = pcall(require, "user.lsp.settings." .. server)
+        if not server_ok then
+            lspconfig[server].setup (opts)
+        else
+            lspconfig[server].setup (vim.tbl_deep_extend("force", server_opts, opts))
+        end
     end
 }
+mason_null_ls.setup {
+    ensure_installed = {"hadolint"}
+}
+
 
 --[=[
 for _, server in pairs(servers) do

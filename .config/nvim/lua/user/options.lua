@@ -17,7 +17,7 @@ vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.swapfile = false
 vim.opt.termguicolors = true
-vim.opt.timeoutlen = 1000
+vim.opt.timeoutlen = 2000
 vim.opt.undofile = true
 vim.opt.updatetime = 300
 vim.opt.writebackup = false
@@ -36,6 +36,7 @@ vim.opt.sidescrolloff = 8
 vim.opt.shortmess:append "c"
 vim.g.material_style = "deep ocean"
 vim.g.do_filetype_lua = 1
+-- vim.g.python3_host_prog = "/usr/bin/env/ python3"
 
 -- vim.cmd "set whichwrap+=<,>,[,],h,l"
 -- vim.cmd [[set iskeyword+=-]]

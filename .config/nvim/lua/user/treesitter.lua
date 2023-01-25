@@ -26,4 +26,30 @@ configs.setup {
         }
     },
     indent = { enable = true, disable = { "" } },
+    markid = {
+        enable = false,
+        queries = {
+            python = [[
+                (import_from_statement (dotted_name) (dotted_name) @markid)
+            ]]
+        }
+    },
+    playground = {
+        enable = true,
+        disable = {},
+        updatetime = 25, -- debounced time for highlighting nodes in the playground from source code
+        persist_queries = false, -- whether the query persists across vim sessions
+        keybindings = {
+            toggle_query_editor = 'o',
+            toggle_hl_groups = 'i',
+            toggle_injected_languages = 't',
+            toggle_anonymous_nodes = 'a',
+            toggle_language_display = 'i',
+            focus_language = 'f',
+            unfocus_language = 'f',
+            update = 'r',
+            goto_node = '<cr>',
+            show_help = '?',
+        },
+    }
 }

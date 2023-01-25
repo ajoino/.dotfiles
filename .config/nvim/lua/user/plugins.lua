@@ -1,19 +1,23 @@
 local fn = vim.fn
 
--- Automatically install packer
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-    PACKER_BOOTSTRAP = fn.system {
-        "git",
-        "clone",
-        "--depth",
-        "1",
-        "https://github.com/wbthomason/packer.nvim",
-        install_path
-    }
-    print "Installing packer. Close and reopen Neovim..."
-    vim.cmd [[packadd packer.nvim]]
+local ensure_packer = function()
+    -- Automatically install packer
+    local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+    if fn.empty(fn.glob(install_path)) > 0 then
+        PACKER_BOOTSTRAP = fn.system {
+            "git",
+            "clone",
+            "--depth",
+            "1",
+            "https://github.com/wbthomason/packer.nvim",
+            install_path
+        }
+        print "Installing packer. Close and reopen Neovim..."
+        vim.cmd [[packadd packer.nvim]]
+    end
 end
+
+local packer_bootstrap = ensure_packer()
 
 -- Autocommand that reloads neovim whenever you save the plugins.lua file
 vim.cmd [[
@@ -44,17 +48,17 @@ return packer.startup(function(use)
     use "nvim-lua/popup.nvim" -- Popup api from vim
     use "nvim-lua/plenary.nvim" -- Useful lua functions used by plugins
     use "windwp/nvim-autopairs"
-    use { "numToStr/Comment.nvim", commit = "2c26a00f32b190390b664e56e32fd5347613b9e2" }
+    use "numToStr/Comment.nvim"
     use 'JoosepAlviste/nvim-ts-context-commentstring'
     use "kyazdani42/nvim-web-devicons"
-    use "kyazdani42/nvim-tree.lua"
+    use "nvim-tree/nvim-tree.lua"
     use "akinsho/toggleterm.nvim"
     use "lukas-reineke/indent-blankline.nvim"
     use 'lambdalisue/suda.vim'
     use {
         "kylechui/nvim-surround",
         tag = "*",
-        config = function ()
+        config = function()
             require("nvim-surround").setup({})
         end
     }
@@ -68,7 +72,8 @@ return packer.startup(function(use)
     use "yonlu/omni.vim"
     use "marko-cerovac/material.nvim"
     use "bluz71/vim-nightfly-guicolors"
-
+    use "folke/tokyonight.nvim"
+    use { 'Everblush/everblush.nvim', as = 'everblush' }
     -- cmp plugins
     use "hrsh7th/nvim-cmp" -- The completion plugin
     use "hrsh7th/cmp-buffer" -- buffer completions
@@ -85,6 +90,8 @@ return packer.startup(function(use)
     use "williamboman/mason.nvim"
     use "neovim/nvim-lspconfig" -- enable LSP
     use "williamboman/mason-lspconfig.nvim"
+    use "jose-elias-alvarez/null-ls.nvim"
+    use "jayp0521/mason-null-ls.nvim"
     use "WhoIsSethDaniel/mason-tool-installer.nvim"
     use "RRethy/vim-illuminate" -- Illuminate other uses of current word/symbol under cursor
 
@@ -97,15 +104,19 @@ return packer.startup(function(use)
         "nvim-treesitter/nvim-treesitter",
         run = ":TSUpdate",
     }
-    use "p00f/nvim-ts-rainbow"
-
+    use "mrjones2014/nvim-ts-rainbow"
+    use 'David-Kunz/markid'
+    use 'nvim-treesitter/playground'
     -- Git
     use "lewis6991/gitsigns.nvim"
 
     -- DAP
-      use { "mfussenegger/nvim-dap", commit = "014ebd53612cfd42ac8c131e6cec7c194572f21d" }
-      use { "rcarriga/nvim-dap-ui", commit = "d76d6594374fb54abf2d94d6a320f3fd6e9bb2f7" }
-      use { "ravenxrz/DAPInstall.nvim", commit = "8798b4c36d33723e7bba6ed6e2c202f84bb300de" }
+    use { "mfussenegger/nvim-dap", commit = "014ebd53612cfd42ac8c131e6cec7c194572f21d" }
+    use { "rcarriga/nvim-dap-ui", commit = "d76d6594374fb54abf2d94d6a320f3fd6e9bb2f7" }
+    use { "ravenxrz/DAPInstall.nvim", commit = "8798b4c36d33723e7bba6ed6e2c202f84bb300de" }
+
+    -- Containerized development
+    use { 'https://codeberg.org/esensar/nvim-dev-container', commit = "de5ca3b31b8305969f5740d10badd0a6c167d0d7" }
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Goes after all plugins
