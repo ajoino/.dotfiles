@@ -172,21 +172,21 @@ mouse = [
 
 @hook.subscribe.resume
 def lock_on_resume():
-    subprocess.run("i3lock-fancy -p")
+    subprocess.run("i3lock-fancy --p")
     logger.warn("Resuming from sleep")
 
 
 @hook.subscribe.screen_change
 def restart_on_randr(qtile):
     # TODO only if numbers of screens changed
-    subprocess.run(Path("$HOME/.screenlayout/laptop-only.sh").expanduser())
+    subprocess.run(str(Path("$HOME/.screenlayout/monitor-only-office.sh").expanduser()))
     qtile.cmd_restart()
 
 
 @hook.subscribe.screens_reconfigured
 def reset_layout():
     logger.warn("Resetting screen layout")
-    lazy.spawn(Path("$HOME/.screenlayout/laptop-only.sh").expanduser())
+    lazy.spawn(str(Path("$HOME/.screenlayout/monitor-only-office.sh").expanduser()))
 
 
 dgroups_key_binder = None

@@ -1,2 +1,4 @@
 .dotfiles
 .config/nvim/plugged/*
+**/__pycache__/*
+**/.mypy_cache
