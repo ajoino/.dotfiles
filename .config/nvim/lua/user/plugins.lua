@@ -95,6 +95,9 @@ return packer.startup(function(use)
     use "WhoIsSethDaniel/mason-tool-installer.nvim"
     use "RRethy/vim-illuminate" -- Illuminate other uses of current word/symbol under cursor
 
+    -- Jenkins
+    use({'ckipp01/nvim-jenkinsfile-linter', requires = { "nvim-lua/plenary.nvim" } })
+
     -- Telescope
     use "nvim-telescope/telescope.nvim"
     use "nvim-telescope/telescope-media-files.nvim"
@@ -107,7 +110,9 @@ return packer.startup(function(use)
     use "mrjones2014/nvim-ts-rainbow"
     use 'David-Kunz/markid'
     use 'nvim-treesitter/playground'
+
     -- Git
+    use "tpope/vim-fugitive"
     use "lewis6991/gitsigns.nvim"
 
     -- DAP

@@ -13,7 +13,7 @@ end
 
 local servers = {
     "pylsp",
-    "sumneko_lua",
+    "lua_ls",
     "clangd",
     "dockerls",
 }
@@ -42,13 +42,6 @@ mason_null_ls.setup {
 
 
 --[=[
-for _, server in pairs(servers) do
-    lspconfig[server].setup({
-        on_attach = require("user.lsp.handlers").on_attach,
-        capabilities = require("user.lsp.handlers").capabilities,
-    })
-end
-
 local opts = {}
 for _, server in pairs(servers) do
     if server == "sumneko_lua" then
