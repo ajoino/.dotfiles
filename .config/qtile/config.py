@@ -36,7 +36,7 @@ from libqtile.log_utils import logger
 from widgets import widgets, widget_defaults, extension_defaults
 from preferences import preferences as pref
 from key_bindings import keys as keys
-from groups import init_groups, init_group_names
+from groups import init_groups, init_group_names, init_scratchpads, Group
 
 mod = pref.mod_key
 
@@ -136,9 +136,17 @@ if __name__ in {"config", "__main__"}:
     group_names = init_group_names()
     groups = init_groups()
 
-    for i, (name, kwargs) in enumerate(group_names, 1):
-        keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
-        keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
+    for i, group in enumerate(groups, 1):
+        if not isinstance(group, Group):
+            continue
+        keys.append(Key([mod], str(i), lazy.group[group.name].toscreen()))
+        keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(group.name)))
+
+    keys.append(Key([mod], 'F1', lazy.group["scratchpad"].dropdown_toggle("browser")))
+    keys.append(Key([], 'F7', lazy.group["scratchpad"].dropdown_toggle("teams")))
+    keys.append(Key([], 'F8', lazy.group["scratchpad"].dropdown_toggle("term")))
+    keys.append(Key([], 'F12', lazy.group["scratchpad"].dropdown_toggle("spotify")))
+    keys.append(Key([], 'F10', lazy.group["scratchpad"].dropdown_toggle("options")))
 
 
 # Setup screen with widgets
@@ -179,7 +187,8 @@ def lock_on_resume():
 @hook.subscribe.screen_change
 def restart_on_randr(qtile):
     # TODO only if numbers of screens changed
-    subprocess.run(str(Path("$HOME/.screenlayout/monitor-only-office.sh").expanduser()))
+    # subprocess.run(str(Path("$HOME/.screenlayout/monitor-only-office.sh").expanduser()))
+    lazy.spawn("autorandr --change")
     qtile.cmd_restart()
 
 
@@ -205,6 +214,7 @@ floating_layout = layout.Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(title="splash"),  # Pycharm initial pop-up
+        Match(wm_class="Msgcompose")
     ]
 )
 auto_fullscreen = True

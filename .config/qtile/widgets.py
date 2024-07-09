@@ -9,6 +9,7 @@ from qtile_extras.widget.decorations import RectDecoration
 from qtile_extras.popup.toolkit import PopupRelativeLayout, PopupText, _PopupLayout
 
 from preferences import preferences as pref
+import nerdfonts as nf
 
 icon_path = Path("/usr/share/icons/Yaru-dark/24x24/panel/")
 
@@ -115,13 +116,16 @@ widgets = [
     # vc.Widget(mode='icon'),
     separator(),
     widget.PulseVolume(
-        emoji=True,
+        # emoji=True,
         theme_path=None,
         # theme_path=icon_path,
         decorations=[widget_fill(0)],
     ),
-    # separator(),
-    # widget.Bluetooth(),
+    separator(),
+    widget.Bluetooth(
+        default_text="\U0000f293 {connected_devices}",
+        decorations=[widget_fill(0)],
+    ),
     separator(),
     widget.UPowerWidget(
         border_color="#dbdbe0",

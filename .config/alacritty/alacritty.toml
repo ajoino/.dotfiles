@@ -1,0 +1,29 @@
+[colors]
+transparent_background_colors = true
+
+[font]
+size = 10
+
+[font.bold]
+family = "jetbrains mono nf"
+style = "Bold"
+
+[font.bold_italic]
+family = "jetbrains mono nf"
+style = "Bold Italic"
+
+[font.italic]
+family = "jetbrains mono nf"
+style = "Italic"
+
+[font.normal]
+family = "jetbrains mono nf"
+style = "Regular"
+
+[shell]
+program = "/usr/bin/fish"
+
+[window]
+opacity = 0.9
+dynamic_padding = true
+# blur = true
